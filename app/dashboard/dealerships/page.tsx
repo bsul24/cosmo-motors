@@ -3,7 +3,7 @@ import Search from '@/app/ui/search';
 import Table from '@/app/ui/dealerships/table';
 import { CreateDealership} from '@/app/ui/dealerships/buttons';
 import { lusitana } from '@/app/ui/fonts';
-import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
+import { DealershipsTableSkeleton, InvoicesTableSkeleton } from '@/app/ui/skeletons';
 import { fetchDealershipsPages } from '@/app/lib/data';
 import { Suspense } from 'react';
  
@@ -28,7 +28,7 @@ export default async function Page({
         <Search placeholder="Search Dealerships..." />
         <CreateDealership />
       </div>
-      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+      <Suspense key={query + currentPage} fallback={<DealershipsTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">

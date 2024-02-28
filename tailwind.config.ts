@@ -12,11 +12,11 @@ const config: Config = {
         '13': 'repeat(13, minmax(0, 1fr))',
       },
       colors: {
-        blue: {
+        red: {
           400: '#2589FE',
-          500: '#0070F3',
-          600: '#2F6FEB',
-        },
+          500: '#f3002d',
+          600: '#eb2f2f',
+        }
       },
     },
     keyframes: {

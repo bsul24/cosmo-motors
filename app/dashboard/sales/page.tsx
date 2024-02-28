@@ -3,7 +3,7 @@ import Search from '@/app/ui/search';
 import Table from '@/app/ui/sales/table';
 import { CreateSale } from '@/app/ui/sales/buttons';
 import { lusitana } from '@/app/ui/fonts';
-import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
+import { InvoicesTableSkeleton, SalesTableSkeleton } from '@/app/ui/skeletons';
 import { fetchSalesPages } from '@/app/lib/data';
 import { Suspense } from 'react';
  
@@ -28,7 +28,7 @@ export default async function Page({
         <Search placeholder="Search Sales..." />
         <CreateSale />
       </div>
-      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+      <Suspense key={query + currentPage} fallback={<SalesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
