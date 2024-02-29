@@ -212,12 +212,3 @@ export const sales = [
     
   },
 ]
-
-module.exports = {
-  vehicles,
-  salespeople,
-  customers,
-  dealerships,
-  dealershipsHasSalespeople,
-  sales
-};
