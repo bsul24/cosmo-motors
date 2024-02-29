@@ -7,7 +7,7 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
-} from './definitions';
+} from './definitions2';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 import { customers, salespeople, vehicles, dealerships, dealershipsHasSalespeople, sales } from './placeholder-data';

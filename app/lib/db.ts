@@ -1,7 +1,7 @@
 import mysql, { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 
-export async function callCosmo(query: string) {
+export async function callCosmo(query: string, values?: any[]) {
 
   try {
 
@@ -19,7 +19,7 @@ export async function callCosmo(query: string) {
 
     })
 
-    const result = await db.execute(query);
+    const result = await db.execute(query, values);
 
     await db.end();
 

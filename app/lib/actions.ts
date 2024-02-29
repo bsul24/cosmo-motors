@@ -11,7 +11,7 @@ const CustomerSchema = z.object({
   customerID: z.number(),
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string(),
+  email: z.string().nullable(),
   phoneNumber: z.string()
 })
 
@@ -25,15 +25,15 @@ export async function createCustomer(formData: FormData) {
   const {firstName, lastName, email, phoneNumber } = CreateCustomer.parse({
     firstName: formData.get('firstName'),
     lastName: formData.get('lastName'),
-    email: formData.get('email'),
+    email: formData.get('email') || null,
     phoneNumber: formData.get('phoneNumber')
   });
   const result = await callCosmo(`
   INSERT INTO Customers (firstName, lastName, email, phoneNumber)
-  VALUES ('${firstName}', '${lastName}', '${email}', '${phoneNumber}')
-`);
+  VALUES ( ?, ?, ?, ?)
+`,[firstName, lastName, email, phoneNumber]);
 
-  console.log(JSON.stringify(result), 'hola')
+  // console.log(JSON.stringify(result), 'hola')
 
 revalidatePath('/dashboard/customers');
 redirect('/dashboard/customers');

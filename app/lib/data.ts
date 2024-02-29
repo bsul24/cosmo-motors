@@ -1,12 +1,7 @@
 import { sql } from '@vercel/postgres';
 import {
   CustomerField,
-  CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
-  LatestInvoiceRaw,
-  User,
-  Revenue,
+  CustomersTable,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -28,7 +23,7 @@ export async function fetchCustomerPages(query: string){
       Customers.email LIKE '${`%${query}%`}' OR
       Customers.phoneNumber LIKE '${`%${query}%`}'
   `) as RowDataPacket;
-    console.log(JSON.stringify(count))
+    // console.log(JSON.stringify(count))
     const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
     return totalPages;
     return 5
@@ -41,7 +36,7 @@ export async function fetchCustomerPages(query: string){
 
 const ITEMS_PER_PAGE = 6;
 // Brings most custormer information based on query
-export async function fetchCustomersMotor(query: string, currentPage: number){
+export async function fetchCustomersMotor(query: string, currentPage: number): Promise<CustomersTable[]>{
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -62,7 +57,7 @@ export async function fetchCustomersMotor(query: string, currentPage: number){
       ORDER BY Customers.customerID DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `) as RowDataPacket;
-    console.log(JSON.stringify(customers))
+    //console.log(JSON.stringify(customers))
 
     return customers[0];
     //return customers;
@@ -73,7 +68,7 @@ export async function fetchCustomersMotor(query: string, currentPage: number){
 }
 
 // Brings most customer information based on id
-export async function fetchCustomerByID(id: number){
+export async function fetchCustomerByID(id: number):Promise<CustomersTable> {
   noStore();
   try {
     const data = await callCosmo(`
@@ -86,7 +81,7 @@ export async function fetchCustomerByID(id: number){
       FROM Customers
       WHERE Customers.customerID = ${id};
     `) as RowDataPacket;
-    console.log(JSON.stringify(data))
+    // console.log(JSON.stringify(data))
     return data[0][0];
     return customers[0];
   } catch (error) {

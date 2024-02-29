@@ -2,9 +2,6 @@
 
 import { CustomerForm } from '@/app/lib/definitions';
 import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -31,6 +28,7 @@ export default function EditInvoiceForm({
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                required
                 id="firstName"
                 name="firstName"
                 type="string"
@@ -51,6 +49,7 @@ export default function EditInvoiceForm({
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                required
                 id="lastName"
                 name="lastName"
                 type="string"
@@ -92,6 +91,7 @@ export default function EditInvoiceForm({
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
+                required
                 id="phoneNumber"
                 name="phoneNumber"
                 type="string"
