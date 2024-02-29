@@ -4,20 +4,76 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { callCosmo } from './db';
+
+const FormSchema = z.object({
+  id: z.string(),
+  customerId: z.string(),
+  amount: z.coerce.number(),
+  status: z.enum(['pending', 'paid']),
+  date: z.string(),
+});
+
+ 
+const CreateInvoice = FormSchema.omit({ id: true, date: true });
+
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+ 
+export async function createInvoice(formData: FormData) {
+  const { customerId, amount, status } = CreateInvoice.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  const amountInCents = amount * 100;
+
+  const date = new Date().toISOString().split('T')[0];
+
+  await sql`
+  INSERT INTO invoices (customer_id, amount, status, date)
+  VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+`;
+
+revalidatePath('/dashboard/invoices');
+redirect('/dashboard/invoices');
+
+}
 
 
-const CustomerSchema = z.object({
+export async function updateInvoice(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateInvoice.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+ 
+  const amountInCents = amount * 100;
+ 
+  await sql`
+    UPDATE invoices
+    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+    WHERE id = ${id}
+  `;
+ 
+  revalidatePath('/dashboard/invoices');
+  redirect('/dashboard/invoices');
+}
+
+export async function deleteInvoice(id: string) {
+  await sql`DELETE FROM invoices WHERE id = ${id}`;
+  revalidatePath('/dashboard/invoices');
+}
+
+
+
+
+const CreateCustomer = z.object({
   customerID: z.number(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
   phoneNumber: z.string()
-})
-
-const CreateCustomer = CustomerSchema.omit({customerID: true})
-
-const UpdateCustomer = CustomerSchema.omit({customerID: true})
+}).omit({customerID: true})
 
 // FIX/IMPLEMENT
 
@@ -27,47 +83,20 @@ export async function createCustomer(formData: FormData) {
     lastName: formData.get('lastName'),
     email: formData.get('email'),
     phoneNumber: formData.get('phoneNumber')
-  });
-  const result = await callCosmo(`
-  INSERT INTO Customers (firstName, lastName, email, phoneNumber)
-  VALUES ('${firstName}', '${lastName}', '${email}', '${phoneNumber}')
-`);
-
-  console.log(JSON.stringify(result), 'hola')
-
-revalidatePath('/dashboard/customers');
-redirect('/dashboard/customers');
+  })
+  return 
 }
 
 
 // FIX/IMPLEMENT
 export async function updateCustomer(id: number, formData: FormData) {
-  const {firstName, lastName, email, phoneNumber } = UpdateCustomer.parse({
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    email: formData.get('email'),
-    phoneNumber: formData.get('phoneNumber')
-  });
-
-  await callCosmo(`
-  UPDATE Customers
-  SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}',  phoneNumber = '${phoneNumber}'
-  WHERE customerID = ${id}
-`);
-
-  revalidatePath('/dashboard/customers');
-  redirect('/dashboard/customers');
+  return
 }
 
 // FIX/IMPLEMENT
 export async function deleteCustomer(id: number){
-  await callCosmo(`DELETE FROM Customers WHERE customerID = ${id}`);
-  revalidatePath('/dashboard/customers');
+  return
 }
-
-
-
-
 
 const CreateSalesperson= z.object({
   salespersonID: z.number(),
