@@ -23,7 +23,7 @@ const MultiSelectCosmo = ({options, selected, setSelected}:{ options:{label:stri
       />
       {/* Hidden Vehicles */}
       <select multiple name="vehiclesIDs" id="vehiclesIDs" value={selected.map(selection => selection.value)} hidden >
-        {selected.map(selection => (<option value={selection.value}></option>))}
+        {selected.map(selection => (<option key={selection.value} value={selection.value}></option>))}
       </select>
     </div>
   );

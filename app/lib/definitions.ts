@@ -6,7 +6,7 @@ export type CustomersTable = {
   customerID: number;
   firstName: string;
   lastName: string;
-  email: string | null ;
+  email: string;
   phoneNumber: string;
 };
 

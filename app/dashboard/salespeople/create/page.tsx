@@ -1,9 +1,9 @@
 import Form from '@/app/ui/salespeople/create-form';
 import Breadcrumbs from '@/app/ui/salespeople/breadcrumbs';
-import { fetchDealerships } from '@/app/lib/data';
+import { fetchAllDealerships} from '@/app/lib/data';
  
 export default async function Page() {
-  const dealerships = await fetchDealerships();
+  const dealerships = await fetchAllDealerships();
  
   return (
     <main>

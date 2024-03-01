@@ -3,8 +3,8 @@ import Search from '@/app/ui/search';
 import Table from '@/app/ui/vehicles/table';
 import { CreateVehicle } from '@/app/ui/vehicles/buttons';
 import { lusitana } from '@/app/ui/fonts';
-import { InvoicesTableSkeleton, VehiclesTableSkeleton } from '@/app/ui/skeletons';
-import { fetchSalespeoplePages, fetchVehiclesPages } from '@/app/lib/data';
+import { VehiclesTableSkeleton } from '@/app/ui/skeletons';
+import { fetchVehiclesPages } from '@/app/lib/data';
 import { Suspense } from 'react';
  
 export default async function Page({

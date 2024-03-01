@@ -1,6 +1,6 @@
 import Form from '@/app/ui/vehicles/create-form';
 import Breadcrumbs from '@/app/ui/vehicles/breadcrumbs';
-import { fetchAllDealerships, fetchDealerships } from '@/app/lib/data';
+import { fetchAllDealerships } from '@/app/lib/data';
  
 export default async function Page() {
   const dealerships = await fetchAllDealerships();
