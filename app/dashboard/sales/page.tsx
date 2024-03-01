@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import Pagination from '@/app/ui/sales/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/sales/table';

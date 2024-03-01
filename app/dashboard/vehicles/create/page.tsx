@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import Form from '@/app/ui/vehicles/create-form';
 import Breadcrumbs from '@/app/ui/vehicles/breadcrumbs';
 import { fetchAllDealerships } from '@/app/lib/data';

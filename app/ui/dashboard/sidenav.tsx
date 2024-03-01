@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import TruckLogo from '@/app/ui/truck-logo';

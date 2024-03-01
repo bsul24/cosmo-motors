@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { deleteCustomer, deleteDealership } from '@/app/lib/actions';

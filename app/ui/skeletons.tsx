@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 // Loading animation
 const shimmer =
   'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';

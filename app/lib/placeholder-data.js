@@ -1,5 +1,6 @@
-// This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
-
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 export const vehicles = [
   {
     vehicleID: 1,

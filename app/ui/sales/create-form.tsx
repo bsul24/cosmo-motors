@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 'use client'
 import { CustomerField, DealershipField, SalespersonField, VehicleField, VehicleForm } from '@/app/lib/definitions';
 import Link from 'next/link';

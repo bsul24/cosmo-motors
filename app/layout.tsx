@@ -1,3 +1,6 @@
+// Citation for the current file:
+// Date: 2/29/2024
+// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import '@/app/ui/global.css'
 import { inter } from '@/app/ui/fonts';
 import SideNav from './ui/dashboard/sidenav';
