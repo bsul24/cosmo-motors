@@ -1,8 +1,12 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { UpdateSalesperson, DeleteSalesperson} from '@/app/ui/salespeople/buttons';
-import { fetchSalespeople } from '@/app/lib/data';
+import {
+  UpdateSalesperson,
+  DeleteSalesperson,
+} from '@/app/ui/salespeople/buttons';
+import { fetchAllSalespeople } from '@/app/lib/data';
+import { fetchSalespersonDealerships } from '@/app/lib/data';
 
 export default async function SalespeopleTable({
   query,
@@ -11,7 +15,16 @@ export default async function SalespeopleTable({
   query: string;
   currentPage: number;
 }) {
-  const salespeople = await fetchSalespeople(query, currentPage)
+  const salespeople = await fetchAllSalespeople(query, currentPage);
+  const dealerships = [];
+
+  for (let i = 0; i < salespeople.length; i++) {
+    const dealershipList = await fetchSalespersonDealerships(
+      salespeople[i].salespersonID,
+    );
+    // dealerships.push(dealershipList);
+    salespeople[i].dealerships = dealershipList;
+  }
 
   return (
     <div className="mt-6 flow-root">
@@ -30,11 +43,20 @@ export default async function SalespeopleTable({
                     </p>
                     <p>{salesperson.email}</p>
                     <p>{salesperson.phoneNumber}</p>
-                    <p>{salesperson.dealerships.reduce((accum, cur) => accum + '' + cur.dealershipName, '')}</p>
+                    <p>
+                      {salesperson.dealerships.reduce(
+                        (accum, cur) => accum + ' ' + cur.dealershipName,
+                        '',
+                      )}
+                    </p>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdateSalesperson salespersonID={salesperson.salespersonID} />
-                    <DeleteSalesperson salespersonID={salesperson.salespersonID} />
+                    <UpdateSalesperson
+                      salespersonID={salesperson.salespersonID}
+                    />
+                    <DeleteSalesperson
+                      salespersonID={salesperson.salespersonID}
+                    />
                   </div>
                 </div>
               </div>
@@ -84,14 +106,21 @@ export default async function SalespeopleTable({
                     {salesperson.phoneNumber}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {salesperson.dealerships.reduce((accum, cur) => accum + '' + cur.dealershipName, '')}
+                    {salesperson.dealerships.reduce((accum, cur, i) => {
+                      return i === 0
+                        ? cur.dealershipName
+                        : accum + ', ' + cur.dealershipName;
+                    }, '')}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                  </td>
+                  <td className="whitespace-nowrap px-3 py-3"></td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                      <UpdateSalesperson salespersonID={salesperson.salespersonID} />
-                      <DeleteSalesperson salespersonID={salesperson.salespersonID} />
+                      <UpdateSalesperson
+                        salespersonID={salesperson.salespersonID}
+                      />
+                      <DeleteSalesperson
+                        salespersonID={salesperson.salespersonID}
+                      />
                     </div>
                   </td>
                 </tr>
