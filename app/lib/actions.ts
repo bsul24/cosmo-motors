@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { callCosmo } from './db';
+import { fetchLastInsertId } from './data';
 
 const CustomerSchema = z.object({
   customerID: z.number(),
@@ -75,17 +76,27 @@ const SalespersonSchema = z.object({
   phoneNumber: z.string(),
 });
 
+const SalespersonHasDealershipSchema = z.object({
+  salespersonID: z.number(),
+  dealershipID: z.number(),
+});
+
 const CreateSalesperson = SalespersonSchema.omit({ salespersonID: true });
 
 const UpdateSalesperson = SalespersonSchema.omit({ salespersonID: true });
+
+const CreateSalespersonHasDealership = SalespersonHasDealershipSchema;
 // FIX/IMPLEMENT
-export async function createSalesperson(formData: FormData) {
-  console.log(formData);
+export async function createSalesperson(formData, dealerships) {
   const { firstName, lastName, email, phoneNumber } = CreateSalesperson.parse({
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    email: formData.get('email'),
-    phoneNumber: formData.get('phoneNumber'),
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    phoneNumber: formData.phoneNumber,
+    // firstName: formData.get('firstName'),
+    // lastName: formData.get('lastName'),
+    // email: formData.get('email'),
+    // phoneNumber: formData.get('phoneNumber'),
   });
   const result = await callCosmo(
     `
@@ -95,10 +106,34 @@ export async function createSalesperson(formData: FormData) {
     [firstName, lastName, email, phoneNumber],
   );
 
+  // const id = result.insertId;
+  const id = await fetchLastInsertId();
+
+  for (const d of dealerships) {
+    const { salespersonID, dealershipID } =
+      CreateSalespersonHasDealership.parse({
+        dealershipID: d.id,
+        salespersonID: id,
+      });
+
+    const result = await callCosmo(
+      `
+        INSERT INTO DealershipsHasSalespeople (dealershipID, salespersonID)
+        VALUES (?, ?)
+      `,
+      [dealershipID, salespersonID],
+    );
+  }
+
   // console.log(JSON.stringify(result), 'hola')
 
   revalidatePath('/dashboard/salespeople');
   redirect('/dashboard/salespeople');
+}
+
+export async function deleteSalesperson(id: number) {
+  await callCosmo(`DELETE FROM Salespeople WHERE salespersonID = ${id}`);
+  revalidatePath('/dashboard/salespeople');
 }
 
 // FIX/IMPLEMENT
@@ -107,9 +142,6 @@ export async function updateSalesperson(id: number, formData: FormData) {
 }
 
 // FIX/IMPLEMENT
-export async function deleteSalesperson(id: number) {
-  return;
-}
 
 const CreateVehicle = z
   .object({

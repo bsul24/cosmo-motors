@@ -195,12 +195,27 @@ export async function fetchAllCustomersMotor() {
 
 // Brings id and name from all dealerships
 export async function fetchAllDealerships() {
-  return dealerships.map((dealership) => {
-    return {
-      dealershipID: dealership.dealershipID,
-      dealershipName: dealership.dealershipName,
-    };
-  });
+  noStore();
+
+  try {
+    const dealerships = (await callCosmo(`
+      SELECT 
+        d.dealershipName, d.dealershipID
+      FROM Dealerships d 
+      ORDER BY d.dealershipName
+    `)) as RowDataPacket;
+    return dealerships[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch dealerships.');
+  }
+
+  // return dealerships.map((dealership) => {
+  //   return {
+  //     dealershipID: dealership.dealershipID,
+  //     dealershipName: dealership.dealershipName,
+  //   };
+  // });
 }
 
 // Brings vehicles on sale
@@ -262,4 +277,31 @@ export async function fetchSales(query: string, currentPage: number) {
 // Fetch most informmation based on ID
 export async function fetchSaleByID(id: number) {
   return sales[0];
+}
+
+export async function fetchLastInsertId() {
+  noStore();
+  try {
+    const result =
+      (await callCosmo(`SELECT MAX(salespersonID) AS max FROM Salespeople
+  `)) as RowDataPacket;
+    const id = result[0][0].max;
+    return id;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of salespeople.');
+  }
+
+  // noStore();
+
+  // try {
+  //   const id = await callCosmo(`
+  //     SELECT MAX(salespersonID) AS maxId FROM Salespeople
+  //   `);
+  //   const maxId = id[0].maxId;
+  //   return typeof maxId === 'number' ? maxId : parseInt(maxId);
+  // } catch (error) {
+  //   console.error('Database Error:', error);
+  //   throw new Error('Failed to fetch dealerships.');
+  // }
 }
