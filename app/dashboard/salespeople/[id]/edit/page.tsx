@@ -3,16 +3,21 @@
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import Form from '@/app/ui/salespeople/edit-form';
 import Breadcrumbs from '@/app/ui/salespeople/breadcrumbs';
-import { fetchAllDealerships, fetchSalespersonByID } from '@/app/lib/data';
- 
+import {
+  fetchAllDealerships,
+  fetchSalespersonByID,
+  fetchSalespersonDealerships,
+} from '@/app/lib/data';
+
 export default async function Page({ params }: { params: { id: number } }) {
   const id = params.id;
 
-  const [salesperson, dealerships] = await Promise.all([
+  const [salesperson, dealerships, selectedDealerships] = await Promise.all([
     fetchSalespersonByID(id),
-    fetchAllDealerships()
+    fetchAllDealerships(),
+    fetchSalespersonDealerships(id),
   ]);
-  
+
   return (
     <main>
       <Breadcrumbs
@@ -25,7 +30,11 @@ export default async function Page({ params }: { params: { id: number } }) {
           },
         ]}
       />
-      <Form salesperson={salesperson} dealerships={dealerships} />
+      <Form
+        salesperson={salesperson}
+        dealerships={dealerships}
+        selectedDealerships={selectedDealerships}
+      />
     </main>
   );
 }

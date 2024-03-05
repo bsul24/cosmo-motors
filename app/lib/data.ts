@@ -158,7 +158,7 @@ export async function fetchSalespersonDealerships(id: number) {
   try {
     const dealerships = (await callCosmo(`
       SELECT 
-        d.dealershipName
+        d.dealershipName, d.dealershipID
       FROM Dealerships d 
       INNER JOIN DealershipsHasSalespeople ds on d.dealershipID = ds.dealershipID
       INNER JOIN Salespeople s on ds.salespersonID = s.salespersonID
@@ -230,7 +230,23 @@ export async function fetchSalespeople(query: string, currentPage: number) {
 
 // Fetch most information from salespeople by ID
 export async function fetchSalespersonByID(id: number) {
-  return salespeople[0];
+  noStore();
+  try {
+    const data = (await callCosmo(`
+      SELECT
+        Salespeople.salespersonID,
+        Salespeople.firstName,
+        Salespeople.lastName,
+        Salespeople.email,
+        Salespeople.phoneNumber
+      FROM Salespeople
+      WHERE Salespeople.salespersonID = ${id};
+    `)) as RowDataPacket;
+    return data[0][0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch salesperson.');
+  }
 }
 
 // calculates how many dealerships based on query

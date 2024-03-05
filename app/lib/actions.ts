@@ -137,8 +137,49 @@ export async function deleteSalesperson(id: number) {
 }
 
 // FIX/IMPLEMENT
-export async function updateSalesperson(id: number, formData: FormData) {
-  return;
+export async function updateSalesperson(id: number, formData, dealerships) {
+  const { firstName, lastName, email, phoneNumber } = UpdateSalesperson.parse({
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    phoneNumber: formData.phoneNumber,
+  });
+  const result = await callCosmo(
+    `
+    UPDATE Salespeople
+    SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}',  phoneNumber = '${phoneNumber}'
+    WHERE salespersonID = ${id}
+`,
+    [firstName, lastName, email, phoneNumber],
+  );
+
+  await callCosmo(
+    `
+      DELETE FROM DealershipsHasSalespeople
+      WHERE salespersonID = ${id}
+    `,
+  );
+
+  for (const d of dealerships) {
+    const { salespersonID, dealershipID } =
+      CreateSalespersonHasDealership.parse({
+        dealershipID: d.id,
+        salespersonID: id,
+      });
+
+    const result = await callCosmo(
+      `
+        INSERT INTO DealershipsHasSalespeople (dealershipID, salespersonID)
+        VALUES (?, ?)
+      `,
+      [dealershipID, salespersonID],
+    );
+  }
+
+  // console.log(JSON.stringify(result), 'hola')
+
+  revalidatePath('/dashboard/salespeople');
+  redirect('/dashboard/salespeople');
 }
 
 // FIX/IMPLEMENT
