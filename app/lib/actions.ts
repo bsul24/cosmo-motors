@@ -16,6 +16,23 @@ const CustomerSchema = z.object({
   phoneNumber: z.string(),
 });
 
+const SalespersonSchema = z.object({
+  salespersonID: z.number(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  phoneNumber: z.string(),
+});
+
+const DealershipSchema = z.object({
+  dealershipID: z.number(),
+  dealershipName: z.string(),
+  state: z.string(),
+  city: z.string(),
+  address: z.string(),
+  phoneNumber: z.string(),
+});
+
 const CreateCustomer = CustomerSchema.omit({ customerID: true });
 
 const UpdateCustomer = CustomerSchema.omit({ customerID: true });
@@ -67,14 +84,6 @@ export async function deleteCustomer(id: number) {
   await callCosmo(`DELETE FROM Customers WHERE customerID = ${id}`);
   revalidatePath('/dashboard/customers');
 }
-
-const SalespersonSchema = z.object({
-  salespersonID: z.number(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  phoneNumber: z.string(),
-});
 
 const SalespersonHasDealershipSchema = z.object({
   salespersonID: z.number(),
@@ -217,8 +226,31 @@ export async function deleteVehicle(id: number) {
   return;
 }
 
+const CreateDealership = DealershipSchema.omit({ dealershipID: true });
+
+const UpdateDealership = DealershipSchema.omit({ dealershipID: true });
+
 export async function createDealership(formData: FormData) {
-  return;
+  const { dealershipName, state, city, address, phoneNumber } =
+    CreateDealership.parse({
+      dealershipName: formData.get('dealershipName'),
+      state: formData.get('state'),
+      city: formData.get('city'),
+      address: formData.get('address'),
+      phoneNumber: formData.get('phoneNumber'),
+    });
+  const result = await callCosmo(
+    `
+  INSERT INTO Dealerships (dealershipName, state, city, address, phoneNumber)
+  VALUES ( ?, ?, ?, ?, ?)
+`,
+    [dealershipName, state, city, address, phoneNumber],
+  );
+
+  // console.log(JSON.stringify(result), 'hola')
+
+  revalidatePath('/dashboard/dealerships');
+  redirect('/dashboard/dealerships');
 }
 
 export async function updateDealership(id: number, formData: FormData) {}

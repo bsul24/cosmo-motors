@@ -3,6 +3,11 @@
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import { CustomerField, CustomersTable } from './definitions';
 import { SalespersonForm, SalespeopleTable } from './definitions';
+import {
+  DealershipField,
+  DealershipForm,
+  DealershipsTable,
+} from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
@@ -251,12 +256,61 @@ export async function fetchSalespersonByID(id: number) {
 
 // calculates how many dealerships based on query
 export async function fetchDealershipsPages(query: string) {
-  return 1;
+  noStore();
+  try {
+    const count = (await callCosmo(`SELECT COUNT(*) as count
+    FROM Dealerships
+    WHERE
+      Dealerships.dealershipName LIKE '${`%${query}%`}' OR
+      Dealerships.state LIKE '${`%${query}%`}' OR
+      Dealerships.city LIKE '${`%${query}%`}' OR
+      Dealerships.address LIKE '${`%${query}%`}' OR
+      Dealerships.phoneNumber LIKE '${`%${query}%`}'
+  `)) as RowDataPacket;
+    // console.log(JSON.stringify(count))
+    const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of dealerships.');
+  }
 }
 
 // Fetch most information about dealerships based on query
-export async function fetchDealerships(query: string, currentPage: number) {
-  return dealerships;
+export async function fetchDealerships(
+  query: string,
+  currentPage: number,
+): Promise<DealershipsTable[]> {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const dealerships = (await callCosmo(`
+      SELECT
+        Dealerships.dealershipID,
+        Dealerships.dealershipName,
+        Dealerships.state,
+        Dealerships.city,
+        Dealerships.address,
+        Dealerships.phoneNumber
+      FROM Dealerships
+      WHERE
+        Dealerships.dealershipID LIKE '${`%${query}%`}' OR
+        Dealerships.dealershipName LIKE '${`%${query}%`}' OR
+        Dealerships.state LIKE '${`%${query}%`}' OR
+        Dealerships.city LIKE '${`%${query}%`}' OR
+        Dealerships.address LIKE '${`%${query}%`}' OR
+        Dealerships.phoneNumber LIKE '${`%${query}%`}'
+      ORDER BY Dealerships.dealershipID DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `)) as RowDataPacket;
+    //console.log(JSON.stringify(customers))
+
+    return dealerships[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch dealerships.');
+  }
 }
 
 // Fetch most information about dealerships based on query

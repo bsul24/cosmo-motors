@@ -17,17 +17,20 @@ export default function Form() {
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Dealership's Name */}
         <div className="mb-4">
-          <label htmlFor="dealershipName" className="mb-2 block text-sm font-medium">
+          <label
+            htmlFor="dealershipName"
+            className="mb-2 block text-sm font-medium"
+          >
             Name
           </label>
           <div className="relative">
-          <input
-                id="dealershipName"
-                name="dealershipName"
-                type="string"
-                placeholder="Enter the dealership's name"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
+            <input
+              id="dealershipName"
+              name="dealershipName"
+              type="string"
+              placeholder="Enter the dealership's name"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            />
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
@@ -38,13 +41,13 @@ export default function Form() {
             State
           </label>
           <div className="relative">
-          <input
-                id="state"
-                name="state"
-                type="string"
-                placeholder="Enter the dealership's state"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
+            <input
+              id="state"
+              name="state"
+              type="string"
+              placeholder="Enter the dealership's state"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            />
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
@@ -55,13 +58,13 @@ export default function Form() {
             City
           </label>
           <div className="relative">
-          <input
-                id="city"
-                name="city"
-                type="string"
-                placeholder="Enter the dealership's city"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
+            <input
+              id="city"
+              name="city"
+              type="string"
+              placeholder="Enter the dealership's city"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            />
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
@@ -72,17 +75,36 @@ export default function Form() {
             Address
           </label>
           <div className="relative">
-          <input
-                id="address"
-                name="address"
-                type="string"
-                placeholder="Enter the dealership's address"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              />
+            <input
+              id="address"
+              name="address"
+              type="string"
+              placeholder="Enter the dealership's address"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            />
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
+        {/* Dealership's phone number */}
+        <div className="mb-4">
+          <label
+            htmlFor="phoneNumber"
+            className="mb-2 block text-sm font-medium"
+          >
+            Phone Number
+          </label>
+          <div className="relative">
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="string"
+              placeholder="Enter the dealership's phone number"
+              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            />
+            <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

@@ -38,6 +38,15 @@ export type SalespersonForm = {
   dealerships: { dealershipID: number; dealershipName: string }[];
 };
 
+export type DealershipsTable = {
+  dealershipID: number;
+  dealershipName: string;
+  state: string;
+  city: string;
+  address: string;
+  phoneNumber: string;
+};
+
 export type DealershipField = {
   dealershipID: number;
   dealershipName: string;
