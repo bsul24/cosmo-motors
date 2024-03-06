@@ -13,6 +13,17 @@ export type CustomersTable = {
   phoneNumber: string;
 };
 
+export type VehiclesTable = {
+  vehicleID: number;
+  make: string;
+  model: string;
+  year: string;
+  price: string;
+  color: string;
+  saleID: number;
+  dealershipName: string;
+};
+
 export type CustomerForm = {
   customerID: number;
   firstName: string;

@@ -193,7 +193,7 @@ export async function updateSalesperson(id: number, formData, dealerships) {
 
 // FIX/IMPLEMENT
 
-const CreateVehicle = z
+const VehicleSchema = z
   .object({
     vehicleID: z.number(),
     make: z.string(),
@@ -201,29 +201,58 @@ const CreateVehicle = z
     year: z.string(),
     price: z.number(),
     color: z.string(),
-    saleID: z.number(),
-  })
-  .omit({ vehicleID: true });
+    dealershipID: z.number()
+  });
+
+const CreateVehicle = VehicleSchema.omit({ vehicleID: true }); 
 
 // FIX/IMPLEMENT
 export async function createVehicle(formData: FormData) {
-  const { firstName, lastName, email, phoneNumber } = CreateCustomer.parse({
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    email: formData.get('email'),
-    phoneNumber: formData.get('phoneNumber'),
+  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse({
+    make: formData.get('make'),
+    model: formData.get('model'),
+    year: formData.get('year'),
+    price: parseFloat(formData.get('price') as string),
+    color: formData.get('color'),
+    dealershipID: parseInt(formData.get('dealershipID') as string)
   });
-  return;
+
+  const result = await callCosmo(
+    `
+  INSERT INTO Vehicles (make, model, year, price, color, dealershipID)
+  VALUES ( ?, ?, ?, ?, ?, ?)
+`,
+    [make, model, year, price, color, dealershipID],
+  );
+  revalidatePath('/dashboard/vehicles');
+  redirect('/dashboard/vehicles');
 }
 
 // FIX/IMPLEMENT
 export async function updateVehicle(id: number, formData: FormData) {
-  return;
+  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse({
+    make: formData.get('make'),
+    model: formData.get('model'),
+    year: formData.get('year'),
+    price: parseFloat(formData.get('price') as string),
+    color: formData.get('color'),
+    dealershipID: parseInt(formData.get('dealershipID') as string)
+  });
+
+  await callCosmo(`
+  UPDATE Vehicles
+  SET make = ?, model = ?, year = ?,  price = ?, color = ?, dealershipID = ?
+  WHERE vehicleID = ${id}
+`,[make, model, year, price, color, dealershipID]);
+
+  revalidatePath('/dashboard/vehicles');
+  redirect('/dashboard/vehicles');
 }
 
 // FIX/IMPLEMENT
 export async function deleteVehicle(id: number) {
-  return;
+  await callCosmo(`DELETE FROM Vehicles WHERE VehicleID = ?`, [id]);
+  revalidatePath('/dashboard/customers');
 }
 
 const CreateDealership = DealershipSchema.omit({ dealershipID: true });

@@ -20,7 +20,7 @@ export default function EditVehicleForm({
   dealerships: DealershipField[]
 }) {
   const updateVehicleWithId = updateVehicle.bind(null, vehicle.vehicleID);
-
+  console.log(vehicle)
   return (
     <form action={updateVehicleWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -34,6 +34,7 @@ export default function EditVehicleForm({
             <div className="relative">
               <input
                 id="make"
+                required
                 name="make"
                 type="string"
                 defaultValue={ vehicle.make }
@@ -54,6 +55,7 @@ export default function EditVehicleForm({
             <div className="relative">
               <input
                 id="model"
+                required
                 name="model"
                 type="string"
                 defaultValue={ vehicle.model }
@@ -74,6 +76,7 @@ export default function EditVehicleForm({
             <div className="relative">
               <input
                 id="year"
+                required
                 name="year"
                 type="string"
                 defaultValue={ vehicle.year }
@@ -82,6 +85,26 @@ export default function EditVehicleForm({
               />
             <TruckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
+          </div>
+        </div>
+
+        {/* Vehicle's price */}
+        <div className="mb-4">
+          <label htmlFor="price" className="mb-2 block text-sm font-medium">
+            Price
+          </label>
+          <div className="relative">
+          <input
+                id="price"
+                name="price"
+                type="number"
+                required
+                step="0.01"
+                defaultValue={ vehicle.price }
+                placeholder="Enter the vehicle's price"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+            <TruckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
@@ -96,6 +119,7 @@ export default function EditVehicleForm({
                 id="color"
                 name="color"
                 type="string"
+                required
                 defaultValue={ vehicle.color }
                 placeholder="Enter vehicle's color"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
