@@ -5,7 +5,7 @@ import {
   UpdateSalesperson,
   DeleteSalesperson,
 } from '@/app/ui/salespeople/buttons';
-import { fetchAllSalespeople } from '@/app/lib/data';
+import { fetchSalespeople } from '@/app/lib/data';
 import { fetchSalespersonDealerships } from '@/app/lib/data';
 
 export default async function SalespeopleTable({
@@ -15,7 +15,7 @@ export default async function SalespeopleTable({
   query: string;
   currentPage: number;
 }) {
-  const salespeople = await fetchAllSalespeople(query, currentPage);
+  const salespeople = await fetchSalespeople(query, currentPage);
   const dealerships = [];
 
   for (let i = 0; i < salespeople.length; i++) {

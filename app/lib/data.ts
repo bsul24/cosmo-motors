@@ -1,7 +1,7 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { CustomerField, CustomersTable } from './definitions';
+import { CustomerField, CustomersTable, SalespersonField, VehiclesTable } from './definitions';
 import { SalespersonForm, SalespeopleTable } from './definitions';
 import {
   DealershipField,
@@ -34,10 +34,8 @@ export async function fetchCustomerPages(query: string) {
       Customers.email LIKE '${`%${query}%`}' OR
       Customers.phoneNumber LIKE '${`%${query}%`}'
   `)) as RowDataPacket;
-    // console.log(JSON.stringify(count))
     const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
     return totalPages;
-    return 5;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of customers.');
@@ -70,10 +68,7 @@ export async function fetchCustomersMotor(
       ORDER BY Customers.customerID DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `)) as RowDataPacket;
-    //console.log(JSON.stringify(customers))
-
     return customers[0];
-    //return customers;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch customers.');
@@ -94,7 +89,6 @@ export async function fetchCustomerByID(id: number): Promise<CustomersTable> {
       FROM Customers
       WHERE Customers.customerID = ${id};
     `)) as RowDataPacket;
-    // console.log(JSON.stringify(data))
     return data[0][0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -124,38 +118,14 @@ export async function fetchSalespeoplePages(query: string) {
 }
 
 // Brings id and name from all salespeople
-export async function fetchAllSalespeople(
-  query: string,
-  currentPage: number,
-): Promise<SalespeopleTable[]> {
-  noStore();
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
-  try {
-    const salespeople = (await callCosmo(`
-      SELECT
-        Salespeople.salespersonID,
-        Salespeople.firstName,
-        Salespeople.lastName,
-        Salespeople.email,
-        Salespeople.phoneNumber
-      FROM Salespeople
-      WHERE
-        Salespeople.firstName LIKE '${`%${query}%`}' OR
-        Salespeople.lastName LIKE '${`%${query}%`}' OR
-        Salespeople.email LIKE '${`%${query}%`}' OR
-        Salespeople.phoneNumber LIKE '${`%${query}%`}'
-      ORDER BY Salespeople.salespersonID DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `)) as RowDataPacket;
-    //console.log(JSON.stringify(customers))
-
-    return salespeople[0];
-    //return salespeople;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch salespeople.');
-  }
+export async function fetchAllSalespeople(): Promise<SalespersonField[]> {
+  return salespeople.map((salesperson) => {
+    return {
+      salespersonID: salesperson.salespersonID,
+      firstName: salesperson.firstName,
+      lastName: salesperson.lastName,
+    };
+  });
 }
 
 export async function fetchSalespersonDealerships(id: number) {
@@ -178,18 +148,9 @@ export async function fetchSalespersonDealerships(id: number) {
     throw new Error('Failed to fetch dealerships.');
   }
 }
-// export async function fetchAllSalespeople() {
-//   return salespeople.map((salesperson) => {
-//     return {
-//       salespersonID: salesperson.salespersonID,
-//       firstName: salesperson.firstName,
-//       lastName: salesperson.lastName,
-//     };
-//   });
-// }
 
 // Brings id and name from all customers
-export async function fetchAllCustomersMotor() {
+export async function fetchAllCustomersMotor(): Promise<CustomerField[]> {
   return customers.map((customer) => {
     return {
       customerID: customer.customerID,
@@ -200,7 +161,7 @@ export async function fetchAllCustomersMotor() {
 }
 
 // Brings id and name from all dealerships
-export async function fetchAllDealerships() {
+export async function fetchAllDealerships(): Promise<DealershipField[]> {
   noStore();
 
   try {
@@ -215,13 +176,6 @@ export async function fetchAllDealerships() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch dealerships.');
   }
-
-  // return dealerships.map((dealership) => {
-  //   return {
-  //     dealershipID: dealership.dealershipID,
-  //     dealershipName: dealership.dealershipName,
-  //   };
-  // });
 }
 
 // Brings vehicles on sale
@@ -230,8 +184,32 @@ export async function fetchAvailableVehicles() {
 }
 
 // Fetch most information from salespeople
-export async function fetchSalespeople(query: string, currentPage: number) {
-  return salespeople;
+export async function fetchSalespeople(query: string, currentPage: number): Promise<SalespeopleTable[]> {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const salespeople = (await callCosmo(`
+      SELECT
+        Salespeople.salespersonID,
+        Salespeople.firstName,
+        Salespeople.lastName,
+        Salespeople.email,
+        Salespeople.phoneNumber
+      FROM Salespeople
+      WHERE
+        Salespeople.firstName LIKE '${`%${query}%`}' OR
+        Salespeople.lastName LIKE '${`%${query}%`}' OR
+        Salespeople.email LIKE '${`%${query}%`}' OR
+        Salespeople.phoneNumber LIKE '${`%${query}%`}'
+      ORDER BY Salespeople.salespersonID DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `)) as RowDataPacket;
+    return salespeople[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch salespeople.');
+  }
 }
 
 // Fetch most information from salespeople by ID
@@ -268,7 +246,6 @@ export async function fetchDealershipsPages(query: string) {
       Dealerships.address LIKE '${`%${query}%`}' OR
       Dealerships.phoneNumber LIKE '${`%${query}%`}'
   `)) as RowDataPacket;
-    // console.log(JSON.stringify(count))
     const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
@@ -305,7 +282,6 @@ export async function fetchDealerships(
       ORDER BY Dealerships.dealershipID DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `)) as RowDataPacket;
-    //console.log(JSON.stringify(customers))
 
     return dealerships[0];
   } catch (error) {
@@ -321,8 +297,38 @@ export async function fetchDealershipByID(id: number) {
 
 // Fetch most information about cars based on query
 
-export async function fetchVehicles(query: string, currentPage: number) {
-  return vehicles;
+export async function fetchVehicles(query: string, currentPage: number) : Promise<VehiclesTable[]> {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const vehicles = (await callCosmo(`
+      SELECT
+        v.vehicleID,
+        v.make,
+        v.model,
+        v.year,
+        v.price,
+        v.color,
+        v.saleID,
+        d.dealershipID,
+        d.dealershipName
+      FROM Vehicles as v
+      INNER JOIN Dealerships as d
+        ON v.dealershipID=d.dealershipID
+      WHERE
+        v.make LIKE '${`%${query}%`}' OR
+        v.model LIKE '${`%${query}%`}' OR
+        v.year LIKE '${`%${query}%`}' OR
+        v.color LIKE '${`%${query}%`}'
+      ORDER BY v.vehicleID DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `)) as RowDataPacket;
+    return vehicles[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch vehicles.');
+  }
 }
 
 export async function fetchVehiclesBySaleID(id: number) {
@@ -347,12 +353,51 @@ export async function fetchVehiclesBySaleID(id: number) {
 
 // Fetch most information about vehicles based on id
 export async function fetchVehicleByID(id: number) {
-  return vehicles[2];
+  noStore();
+
+  try {
+    const vehicles = (await callCosmo(`
+      SELECT
+        v.vehicleID,
+        v.make,
+        v.model,
+        v.year,
+        v.price,
+        v.color,
+        v.saleID,
+        d.dealershipID,
+        d.dealershipName
+      FROM Vehicles as v
+      INNER JOIN Dealerships as d
+        ON v.dealershipID=d.dealershipID
+      WHERE v.vehicleID=?
+    `,[id])) as RowDataPacket;
+    return vehicles[0][0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch vehicles.');
+  }
 }
 
 // Calculates pages for vehicles based on query
 export async function fetchVehiclesPages(query: string) {
-  return 1;
+  noStore();
+  try {
+    const count = (await callCosmo(`SELECT COUNT(*) as count
+    FROM Vehicles
+    WHERE
+      Vehicles.make LIKE '${`%${query}%`}' OR
+      Vehicles.model LIKE '${`%${query}%`}' OR
+      Vehicles.year LIKE '${`%${query}%`}' OR
+      Vehicles.color LIKE '${`%${query}%`}'
+
+  `)) as RowDataPacket;
+    const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of customers.');
+  }
 }
 
 // calculates how many sales  based on query

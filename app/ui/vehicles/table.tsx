@@ -97,7 +97,7 @@ export default async function VehiclesTable({
                     {vehicle.saleID ? 'SOLD' : 'ON SALE'}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {vehicle.dealershipID ? vehicle.dealershipName : ''}
+                    {vehicle.dealershipName}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                   </td>
