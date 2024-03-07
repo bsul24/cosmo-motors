@@ -82,6 +82,8 @@ export type VehicleField = {
   color: string;
   price: number;
   model: string;
+  dealershipID: number;
+  dealershipName: string;
 };
 
 export type VehicleForm = {
