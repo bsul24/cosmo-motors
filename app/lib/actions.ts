@@ -252,7 +252,7 @@ export async function updateVehicle(id: number, formData: FormData) {
 // FIX/IMPLEMENT
 export async function deleteVehicle(id: number) {
   await callCosmo(`DELETE FROM Vehicles WHERE VehicleID = ?`, [id]);
-  revalidatePath('/dashboard/customers');
+  revalidatePath('/dashboard/vehicles');
 }
 
 const CreateDealership = DealershipSchema.omit({ dealershipID: true });
@@ -341,4 +341,7 @@ export async function createSale(formData: FormData) {
 
 export async function updateSale(id: number, formData: FormData) {}
 
-export async function deleteSale(id: number) {}
+export async function deleteSale(id: number) {
+  await callCosmo(`DELETE FROM Sales WHERE saleID = ?`, [id]);
+  revalidatePath('/dashboard/sales');
+}
