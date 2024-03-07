@@ -94,6 +94,13 @@ export type DealershipForm = {
   phoneNumber: string;
 };
 
+export type SalesTable = {
+  saleID: number;
+  saleDate: string;
+  customerID: number;
+  salespersonID: number;
+};
+
 export type SaleForm = {
   saleID: number;
   saleDate: string;

@@ -8,6 +8,7 @@ import {
   DealershipForm,
   DealershipsTable,
 } from './definitions';
+import { SalesTable } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
@@ -324,6 +325,26 @@ export async function fetchVehicles(query: string, currentPage: number) {
   return vehicles;
 }
 
+export async function fetchVehiclesBySaleID(id: number) {
+  noStore();
+  try {
+    const data = (await callCosmo(`
+      SELECT
+        Vehicles.make,
+        Vehicles.model,
+        Vehicles.year,
+        Vehicles.color
+      FROM Vehicles
+      WHERE Vehicles.saleID = ${id};
+    `)) as RowDataPacket;
+    // console.log(JSON.stringify(data))
+    return data[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch vehicles.');
+  }
+}
+
 // Fetch most information about vehicles based on id
 export async function fetchVehicleByID(id: number) {
   return vehicles[2];
@@ -336,12 +357,55 @@ export async function fetchVehiclesPages(query: string) {
 
 // calculates how many sales  based on query
 export async function fetchSalesPages(query: string) {
-  return 1;
+  noStore();
+  try {
+    const count = (await callCosmo(`SELECT COUNT(*) as count
+    FROM Sales
+    WHERE
+      Sales.saleDate LIKE '${`%${query}%`}' OR
+      Sales.customerID LIKE '${`%${query}%`}' OR
+      Sales.salespersonID LIKE '${`%${query}%`}'
+  `)) as RowDataPacket;
+    // console.log(JSON.stringify(count))
+    const totalPages = Math.ceil(Number(count[0][0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of sales.');
+  }
 }
 
 // Fetch most information related to sales
-export async function fetchSales(query: string, currentPage: number) {
-  return sales;
+export async function fetchSales(
+  query: string,
+  currentPage: number,
+): Promise<SalesTable[]> {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const sales = (await callCosmo(`
+      SELECT
+        Sales.saleID,
+        Sales.saleDate,
+        Sales.customerID,
+        Sales.salespersonID
+      FROM Sales
+      WHERE
+        Sales.saleID LIKE '${`%${query}%`}' OR
+        Sales.saleDate LIKE '${`%${query}%`}' OR
+        Sales.customerID LIKE '${`%${query}%`}' OR
+        Sales.salespersonID LIKE '${`%${query}%`}' 
+      ORDER BY Sales.saleID DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `)) as RowDataPacket;
+    //console.log(JSON.stringify(customers))
+
+    return sales[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch sales.');
+  }
 }
 
 // Fetch most informmation based on ID
