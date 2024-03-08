@@ -6,6 +6,8 @@ import {
   fetchSales,
   fetchSalespeople,
   fetchVehiclesBySaleID,
+  fetchCustomerByID,
+  fetchSalespersonByID,
 } from '@/app/lib/data';
 
 export default async function SalesTable({
@@ -15,11 +17,16 @@ export default async function SalesTable({
   query: string;
   currentPage: number;
 }) {
+  const testData = await fetchSalespeople(query, currentPage);
   const sales = await fetchSales(query, currentPage);
   const vehicles = [];
   for (const sale of sales) {
-    const list = await fetchVehiclesBySaleID(sale.saleID);
-    vehicles.push(list);
+    const vehicleList = await fetchVehiclesBySaleID(sale.saleID);
+    const customer = await fetchCustomerByID(sale.customerID);
+    const salesperson = await fetchSalespersonByID(sale.salespersonID);
+    sale.vehicles = vehicleList;
+    sale.customer = `${customer.firstName} ${customer.lastName}`;
+    sale.salesperson = `${salesperson.firstName} ${salesperson.lastName}`;
   }
 
   return (
@@ -28,7 +35,6 @@ export default async function SalesTable({
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
             {sales?.map((sale, i) => {
-              const vehicleList = vehicles[i];
               return (
                 <div
                   key={sale.saleID}
@@ -36,27 +42,29 @@ export default async function SalesTable({
                 >
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
-                      <p className="text-xl font-medium">{sale.price}</p>
+                      <p className="text-xl font-medium">Price</p>
                       <p>
                         VEHICLE:{' '}
-                        {vehicles.make +
-                          ' ' +
-                          vehicles.model +
-                          ' ' +
-                          vehicles.year +
-                          ' ' +
-                          vehicles.color}
+                        {sale.vehicles.length === 0
+                          ? 'NONE'
+                          : sale.vehicles
+                              .map((vehicle) => {
+                                return `${vehicle.color} ${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+                              })
+                              .join(', ')}
                       </p>
-                      <p>DEALERSHIP: {sale.dealershipName}</p>
+                      <p>
+                        SALEDATE:{' '}
+                        {`${sale.saleDate.getFullYear()}-${String(
+                          sale.saleDate.getMonth() + 1,
+                        ).padStart(2, '0')}-${String(
+                          sale.saleDate.getDate(),
+                        ).padStart(2, '0')}`}
+                      </p>
+                      <p>CUSTOMER: {sale.customer ? sale.customer : 'NONE'}</p>
                       <p>
                         SALESPERSON:{' '}
-                        {sale.salespersonFirstName +
-                          ' ' +
-                          sale.salesPersonLastName}
-                      </p>
-                      <p>
-                        CUSTOMER:{' '}
-                        {sale.customerFirstName + ' ' + sale.customerLastName}
+                        {sale.salesperson ? sale.salesperson : 'NONE'}
                       </p>
                     </div>
                     <div className="flex justify-end gap-2">
@@ -72,10 +80,10 @@ export default async function SalesTable({
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                  Vehicle
+                  Vehicles
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Dealership
+                  Sale Date
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Customer
@@ -89,44 +97,48 @@ export default async function SalesTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {sales?.map((sale) => (
-                <tr
-                  key={sale.saleID}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
-                      <p>
-                        {sale.make +
-                          ' ' +
-                          sale.model +
-                          ' ' +
-                          sale.year +
-                          ' ' +
-                          sale.color +
-                          ' - ' +
-                          sale.price}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {sale.dealershipName}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {sale.salespersonFirstName + ' ' + sale.salesPersonLastName}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    {sale.customerFirstName + ' ' + sale.customerLastName}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3"></td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
-                      {/* <UpdateSale saleID={sale.saleID} /> */}
-                      <DeleteSale saleID={sale.saleID} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {sales?.map((sale, i) => {
+                return (
+                  <tr
+                    key={sale.saleID}
+                    className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  >
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex items-center gap-3">
+                        <p>
+                          {sale.vehicles.length === 0
+                            ? 'NONE'
+                            : sale.vehicles
+                                .map((vehicle) => {
+                                  return `${vehicle.color} ${vehicle.year} ${vehicle.make} ${vehicle.model}`;
+                                })
+                                .join(', ')}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {`${sale.saleDate.getFullYear()}-${String(
+                        sale.saleDate.getMonth() + 1,
+                      ).padStart(2, '0')}-${String(
+                        sale.saleDate.getDate(),
+                      ).padStart(2, '0')}`}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {sale.customer ? sale.customer : 'NONE'}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
+                      {sale.salesperson ? sale.salesperson : 'NONE'}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3"></td>
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
+                        {/* <UpdateSale saleID={sale.saleID} /> */}
+                        <DeleteSale saleID={sale.saleID} />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
