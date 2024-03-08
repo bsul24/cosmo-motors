@@ -15,8 +15,9 @@ import MultiSelectCosmo from '../multiselect';
 import React, { useState } from "react";
 
 
-export default function Form( {dealerships, vehicles, customers, salespeople}: {dealerships: DealershipField[], vehicles: VehicleField[], customers: CustomerField[], salespeople: SalespersonField[]}) {
+export default function Form( {vehicles, customers, salespeople}: {vehicles: VehicleField[], customers: CustomerField[], salespeople: SalespersonField[]}) {
   const [selected, setSelected] = useState([]);
+  const multiName = 'vehicleIDs'
   return (
     <form action={createSale}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -38,7 +39,7 @@ export default function Form( {dealerships, vehicles, customers, salespeople}: {
               </option>
               {customers.map((customer) => (
                 <option key={customer.customerID} value={customer.customerID}>
-                  {customer.firstName + customer.lastName}
+                  {customer.firstName +  ' ' + customer.lastName}
                 </option>
               ))}
             </select>
@@ -63,7 +64,7 @@ export default function Form( {dealerships, vehicles, customers, salespeople}: {
               </option>
               {salespeople.map((salesperson) => (
                 <option key={salesperson.salespersonID} value={salesperson.salespersonID}>
-                  {salesperson.firstName + salesperson.lastName}
+                  {salesperson.firstName + ' ' + salesperson.lastName}
                 </option>
               ))}
             </select>
@@ -75,14 +76,14 @@ export default function Form( {dealerships, vehicles, customers, salespeople}: {
 
         {/* Vehicles */}
         <div className="mb-4">
-          <label htmlFor="vehicles" className="mb-2 block text-sm font-medium">
+          <label htmlFor={multiName} className="mb-2 block text-sm font-medium">
             Choose Vehicles
           </label>
           <div className="relative">
             <MultiSelectCosmo options={vehicles.map((vehicle)=> {
-              const label = vehicle.make+' '+vehicle.model+' '+vehicle.year+' '+vehicle.color + ' - ' + vehicle.price 
+              const label = vehicle.make+' '+vehicle.model+' '+vehicle.year+' '+vehicle.color + ' - Price: $' + vehicle.price  + ' - Dealership: ' + vehicle.dealershipName
               return {label:label, value:vehicle.vehicleID}
-              })} selected={selected} setSelected={setSelected}/>
+              })} selected={selected} setSelected={setSelected} name={multiName}/>
             <TruckIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>

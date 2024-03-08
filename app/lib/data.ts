@@ -1,7 +1,7 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { CustomerField, CustomersTable, SalespersonField, VehiclesTable } from './definitions';
+import { CustomerField, CustomersTable, SalespersonField, VehicleField, VehiclesTable } from './definitions';
 import { SalespersonForm, SalespeopleTable } from './definitions';
 import {
   DealershipField,
@@ -119,13 +119,21 @@ export async function fetchSalespeoplePages(query: string) {
 
 // Brings id and name from all salespeople
 export async function fetchAllSalespeople(): Promise<SalespersonField[]> {
-  return salespeople.map((salesperson) => {
-    return {
-      salespersonID: salesperson.salespersonID,
-      firstName: salesperson.firstName,
-      lastName: salesperson.lastName,
-    };
-  });
+  noStore();
+
+  try {
+    const salespeople = (await callCosmo(`
+      SELECT
+        Salespeople.salespersonID,
+        Salespeople.firstName,
+        Salespeople.lastName
+      FROM Salespeople
+    `)) as RowDataPacket;
+    return salespeople[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch salespeople.');
+  }
 }
 
 export async function fetchSalespersonDealerships(id: number) {
@@ -151,13 +159,21 @@ export async function fetchSalespersonDealerships(id: number) {
 
 // Brings id and name from all customers
 export async function fetchAllCustomersMotor(): Promise<CustomerField[]> {
-  return customers.map((customer) => {
-    return {
-      customerID: customer.customerID,
-      firstName: customer.firstName,
-      lastName: customer.lastName,
-    };
-  });
+  noStore();
+  try {
+    const customers = (await callCosmo(`
+      SELECT
+        Customers.customerID,
+        Customers.firstName,
+        Customers.lastName
+      FROM Customers
+    `)) as RowDataPacket;
+    return customers[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch customers.');
+  }
+
 }
 
 // Brings id and name from all dealerships
@@ -179,8 +195,31 @@ export async function fetchAllDealerships(): Promise<DealershipField[]> {
 }
 
 // Brings vehicles on sale
-export async function fetchAvailableVehicles() {
-  return vehicles;
+export async function fetchAvailableVehicles(): Promise<VehicleField[]> {
+  noStore();
+  try {
+    const vehicles = (await callCosmo(`
+      SELECT
+        v.vehicleID,
+        v.make,
+        v.model,
+        v.year,
+        v.price,
+        v.color,
+        v.saleID,
+        d.dealershipID,
+        d.dealershipName
+      FROM Vehicles as v
+      INNER JOIN Dealerships as d
+        ON v.dealershipID=d.dealershipID
+      WHERE
+        v.saleID IS NULL
+    `)) as RowDataPacket;
+    return vehicles[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch vehicles.');
+  }
 }
 
 // Fetch most information from salespeople
@@ -454,9 +493,9 @@ export async function fetchSales(
 }
 
 // Fetch most informmation based on ID
-export async function fetchSaleByID(id: number) {
-  return sales[0];
-}
+// export async function fetchSaleByID(id: number) {
+//   return sales[0];
+// }
 
 export async function fetchLastInsertId() {
   noStore();

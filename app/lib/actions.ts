@@ -252,7 +252,7 @@ export async function updateVehicle(id: number, formData: FormData) {
 // FIX/IMPLEMENT
 export async function deleteVehicle(id: number) {
   await callCosmo(`DELETE FROM Vehicles WHERE VehicleID = ?`, [id]);
-  revalidatePath('/dashboard/customers');
+  revalidatePath('/dashboard/vehicles');
 }
 
 const CreateDealership = DealershipSchema.omit({ dealershipID: true });
@@ -286,11 +286,62 @@ export async function updateDealership(id: number, formData: FormData) {}
 
 export async function deleteDealership(id: number) {}
 
+
+const SaleSchema = z
+  .object({
+    saleID: z.number(),
+    customerID: z.number(),
+    salespersonID: z.number(),
+    vehicleIDs: z.array(z.string())
+  });
+
+const CreateSale = SaleSchema.omit({ saleID: true }); 
+
 export async function createSale(formData: FormData) {
+  const { customerID, salespersonID, vehicleIDs } = CreateSale.parse({
+    customerID: parseFloat(formData.get('customerId') as string),
+    salespersonID: parseInt(formData.get('salespersonId') as string),
+    vehicleIDs: formData.getAll('vehicleIDs')
+  });
+
+  const date = new Date();
+
+  const result: any = await callCosmo(
+    `
+  INSERT INTO Sales (saleDate, customerID, salespersonID)
+  VALUES ( ?, ?, ?)
+`,
+    [date, customerID, salespersonID],
+  );
+
+  const insertID = result[0]?.insertId;
+
+  for (const vehicleID of vehicleIDs) {
+
+    const update_result = await callCosmo(
+      `UPDATE Vehicles
+      SET saleID = ?
+      WHERE vehicleID=?`,
+      [insertID, vehicleID]
+    )
+
+  }
+
+  revalidatePath('/dashboard/sales');
+  redirect('/dashboard/sales');
+
+
+
+
+
   console.log(formData.getAll('vehiclesIDs'));
   console.log(formData.get('salespersonId'));
+  console.log(formData.get('customerId'));
 }
 
 export async function updateSale(id: number, formData: FormData) {}
 
-export async function deleteSale(id: number) {}
+export async function deleteSale(id: number) {
+  await callCosmo(`DELETE FROM Sales WHERE saleID = ?`, [id]);
+  revalidatePath('/dashboard/sales');
+}
