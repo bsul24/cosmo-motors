@@ -1,7 +1,13 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { CustomerField, CustomersTable, SalespersonField, VehicleField, VehiclesTable } from './definitions';
+import {
+  CustomerField,
+  CustomersTable,
+  SalespersonField,
+  VehicleField,
+  VehiclesTable,
+} from './definitions';
 import { SalespersonForm, SalespeopleTable } from './definitions';
 import {
   DealershipField,
@@ -173,7 +179,6 @@ export async function fetchAllCustomersMotor(): Promise<CustomerField[]> {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch customers.');
   }
-
 }
 
 // Brings id and name from all dealerships
@@ -223,7 +228,10 @@ export async function fetchAvailableVehicles(): Promise<VehicleField[]> {
 }
 
 // Fetch most information from salespeople
-export async function fetchSalespeople(query: string, currentPage: number): Promise<SalespeopleTable[]> {
+export async function fetchSalespeople(
+  query: string,
+  currentPage: number,
+): Promise<SalespeopleTable[]> {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -331,12 +339,32 @@ export async function fetchDealerships(
 
 // Fetch most information about dealerships based on query
 export async function fetchDealershipByID(id: number) {
-  return dealerships[0];
+  noStore();
+  try {
+    const data = (await callCosmo(`
+      SELECT
+        Dealerships.dealershipID,
+        Dealerships.dealershipName,
+        Dealerships.state,
+        Dealerships.city,
+        Dealerships.address,
+        Dealerships.phoneNumber
+      FROM Dealerships
+      WHERE Dealerships.dealershipID = ${id};
+    `)) as RowDataPacket;
+    return data[0][0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch dealership.');
+  }
 }
 
 // Fetch most information about cars based on query
 
-export async function fetchVehicles(query: string, currentPage: number) : Promise<VehiclesTable[]> {
+export async function fetchVehicles(
+  query: string,
+  currentPage: number,
+): Promise<VehiclesTable[]> {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -353,7 +381,7 @@ export async function fetchVehicles(query: string, currentPage: number) : Promis
         d.dealershipID,
         d.dealershipName
       FROM Vehicles as v
-      INNER JOIN Dealerships as d
+      LEFT JOIN Dealerships as d
         ON v.dealershipID=d.dealershipID
       WHERE
         v.make LIKE '${`%${query}%`}' OR
@@ -395,7 +423,8 @@ export async function fetchVehicleByID(id: number) {
   noStore();
 
   try {
-    const vehicles = (await callCosmo(`
+    const vehicles = (await callCosmo(
+      `
       SELECT
         v.vehicleID,
         v.make,
@@ -410,7 +439,9 @@ export async function fetchVehicleByID(id: number) {
       INNER JOIN Dealerships as d
         ON v.dealershipID=d.dealershipID
       WHERE v.vehicleID=?
-    `,[id])) as RowDataPacket;
+    `,
+      [id],
+    )) as RowDataPacket;
     return vehicles[0][0];
   } catch (error) {
     console.error('Database Error:', error);

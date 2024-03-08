@@ -1,7 +1,7 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { UpdateVehicle, DeleteVehicle} from '@/app/ui/vehicles/buttons';
+import { UpdateVehicle, DeleteVehicle } from '@/app/ui/vehicles/buttons';
 import { fetchVehicles } from '@/app/lib/data';
 
 export default async function VehiclesTable({
@@ -11,7 +11,7 @@ export default async function VehiclesTable({
   query: string;
   currentPage: number;
 }) {
-  const vehicles = await fetchVehicles(query, currentPage)
+  const vehicles = await fetchVehicles(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
@@ -30,12 +30,15 @@ export default async function VehiclesTable({
                     </p>
                     <p>PRICE: ${vehicle.price}</p>
                     <p>COLOR : {vehicle.color}</p>
-                    <p>DEALERSHIP : {vehicle.dealershipName}</p>
-                    <p>{vehicle.saleID ? 'SOLD': 'On SALE'}</p>
+                    <p>
+                      DEALERSHIP :{' '}
+                      {vehicle.dealershipName ? vehicle.dealershipName : 'NONE'}
+                    </p>
+                    <p>{vehicle.saleID ? 'SOLD' : 'On SALE'}</p>
                   </div>
                   <div className="flex justify-end gap-2">
-                   <UpdateVehicle vehicleID={vehicle.vehicleID} />
-                   <DeleteVehicle vehicleID={vehicle.vehicleID} />
+                    <UpdateVehicle vehicleID={vehicle.vehicleID} />
+                    <DeleteVehicle vehicleID={vehicle.vehicleID} />
                   </div>
                 </div>
               </div>
@@ -97,13 +100,12 @@ export default async function VehiclesTable({
                     {vehicle.saleID ? 'SOLD' : 'ON SALE'}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {vehicle.dealershipName}
+                    {vehicle.dealershipName ? vehicle.dealershipName : 'NONE'}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                  </td>
+                  <td className="whitespace-nowrap px-3 py-3"></td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                     <UpdateVehicle vehicleID={vehicle.vehicleID} />
+                      <UpdateVehicle vehicleID={vehicle.vehicleID} />
                       <DeleteVehicle vehicleID={vehicle.vehicleID} />
                     </div>
                   </td>

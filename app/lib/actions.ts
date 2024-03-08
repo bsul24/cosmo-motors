@@ -193,29 +193,30 @@ export async function updateSalesperson(id: number, formData, dealerships) {
 
 // FIX/IMPLEMENT
 
-const VehicleSchema = z
-  .object({
-    vehicleID: z.number(),
-    make: z.string(),
-    model: z.string(),
-    year: z.string(),
-    price: z.number(),
-    color: z.string(),
-    dealershipID: z.number()
-  });
+const VehicleSchema = z.object({
+  vehicleID: z.number(),
+  make: z.string(),
+  model: z.string(),
+  year: z.string(),
+  price: z.number(),
+  color: z.string(),
+  dealershipID: z.number(),
+});
 
-const CreateVehicle = VehicleSchema.omit({ vehicleID: true }); 
+const CreateVehicle = VehicleSchema.omit({ vehicleID: true });
 
 // FIX/IMPLEMENT
 export async function createVehicle(formData: FormData) {
-  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse({
-    make: formData.get('make'),
-    model: formData.get('model'),
-    year: formData.get('year'),
-    price: parseFloat(formData.get('price') as string),
-    color: formData.get('color'),
-    dealershipID: parseInt(formData.get('dealershipID') as string)
-  });
+  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse(
+    {
+      make: formData.get('make'),
+      model: formData.get('model'),
+      year: formData.get('year'),
+      price: parseFloat(formData.get('price') as string),
+      color: formData.get('color'),
+      dealershipID: parseInt(formData.get('dealershipID') as string),
+    },
+  );
 
   const result = await callCosmo(
     `
@@ -230,20 +231,25 @@ export async function createVehicle(formData: FormData) {
 
 // FIX/IMPLEMENT
 export async function updateVehicle(id: number, formData: FormData) {
-  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse({
-    make: formData.get('make'),
-    model: formData.get('model'),
-    year: formData.get('year'),
-    price: parseFloat(formData.get('price') as string),
-    color: formData.get('color'),
-    dealershipID: parseInt(formData.get('dealershipID') as string)
-  });
+  const { make, model, year, price, color, dealershipID } = CreateVehicle.parse(
+    {
+      make: formData.get('make'),
+      model: formData.get('model'),
+      year: formData.get('year'),
+      price: parseFloat(formData.get('price') as string),
+      color: formData.get('color'),
+      dealershipID: parseInt(formData.get('dealershipID') as string),
+    },
+  );
 
-  await callCosmo(`
+  await callCosmo(
+    `
   UPDATE Vehicles
   SET make = ?, model = ?, year = ?,  price = ?, color = ?, dealershipID = ?
   WHERE vehicleID = ${id}
-`,[make, model, year, price, color, dealershipID]);
+`,
+    [make, model, year, price, color, dealershipID],
+  );
 
   revalidatePath('/dashboard/vehicles');
   redirect('/dashboard/vehicles');
@@ -282,26 +288,45 @@ export async function createDealership(formData: FormData) {
   redirect('/dashboard/dealerships');
 }
 
-export async function updateDealership(id: number, formData: FormData) {}
+export async function updateDealership(id: number, formData: FormData) {
+  const { dealershipName, state, city, address, phoneNumber } =
+    UpdateDealership.parse({
+      dealershipName: formData.get('dealershipName'),
+      state: formData.get('state'),
+      city: formData.get('city'),
+      address: formData.get('address'),
+      phoneNumber: formData.get('phoneNumber'),
+    });
 
-export async function deleteDealership(id: number) {}
+  await callCosmo(`
+  UPDATE Dealerships
+  SET dealershipName = '${dealershipName}', state = '${state}', city = '${city}',  address = '${address}', phoneNumber = '${phoneNumber}'
+  WHERE dealershipID = ${id}
+`);
 
+  revalidatePath('/dashboard/dealerships');
+  redirect('/dashboard/dealerships');
+}
 
-const SaleSchema = z
-  .object({
-    saleID: z.number(),
-    customerID: z.number(),
-    salespersonID: z.number(),
-    vehicleIDs: z.array(z.string())
-  });
+export async function deleteDealership(id: number) {
+  await callCosmo(`DELETE FROM Dealerships WHERE dealershipID = ${id}`);
+  revalidatePath('/dashboard/dealerships');
+}
 
-const CreateSale = SaleSchema.omit({ saleID: true }); 
+const SaleSchema = z.object({
+  saleID: z.number(),
+  customerID: z.number(),
+  salespersonID: z.number(),
+  vehicleIDs: z.array(z.string()),
+});
+
+const CreateSale = SaleSchema.omit({ saleID: true });
 
 export async function createSale(formData: FormData) {
   const { customerID, salespersonID, vehicleIDs } = CreateSale.parse({
     customerID: parseFloat(formData.get('customerId') as string),
     salespersonID: parseInt(formData.get('salespersonId') as string),
-    vehicleIDs: formData.getAll('vehicleIDs')
+    vehicleIDs: formData.getAll('vehicleIDs'),
   });
 
   const date = new Date();
@@ -317,22 +342,16 @@ export async function createSale(formData: FormData) {
   const insertID = result[0]?.insertId;
 
   for (const vehicleID of vehicleIDs) {
-
     const update_result = await callCosmo(
       `UPDATE Vehicles
       SET saleID = ?
       WHERE vehicleID=?`,
-      [insertID, vehicleID]
-    )
-
+      [insertID, vehicleID],
+    );
   }
 
   revalidatePath('/dashboard/sales');
   redirect('/dashboard/sales');
-
-
-
-
 
   console.log(formData.getAll('vehiclesIDs'));
   console.log(formData.get('salespersonId'));
