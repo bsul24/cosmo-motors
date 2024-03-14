@@ -7,7 +7,6 @@ import { fetchAllDealerships, fetchVehicleByID } from '@/app/lib/data';
  
 export default async function Page({ params }: { params: { id: number } }) {
   const id = params.id;
-
   const [vehicle, dealerships] = await Promise.all([
     fetchVehicleByID(id),
     fetchAllDealerships()

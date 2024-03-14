@@ -141,6 +141,9 @@ export default function EditVehicleForm({
             className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             defaultValue={vehicle.dealershipID}
           >
+            <option value={""}>
+            -- NO DEALERSHIP --
+            </option>
             {dealerships.map((dealership) => (
               <option key={dealership.dealershipID} value={dealership.dealershipID}>
                 {dealership.dealershipName}

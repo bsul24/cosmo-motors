@@ -436,7 +436,7 @@ export async function fetchVehicleByID(id: number) {
         d.dealershipID,
         d.dealershipName
       FROM Vehicles as v
-      INNER JOIN Dealerships as d
+      LEFT JOIN Dealerships as d
         ON v.dealershipID=d.dealershipID
       WHERE v.vehicleID=?
     `,
