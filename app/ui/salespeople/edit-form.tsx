@@ -81,6 +81,7 @@ export default function EditSalespersonForm({
                 id="firstName"
                 name="firstName"
                 type="string"
+                required
                 defaultValue={salesperson.firstName}
                 onChange={handleChange}
                 placeholder="Enter salesperson's first name"
@@ -102,6 +103,7 @@ export default function EditSalespersonForm({
                 id="lastName"
                 name="lastName"
                 type="string"
+                required
                 defaultValue={salesperson.lastName}
                 onChange={handleChange}
                 placeholder="Enter salesperson's last name"
@@ -147,6 +149,7 @@ export default function EditSalespersonForm({
                 id="phoneNumber"
                 name="phoneNumber"
                 type="string"
+                required
                 defaultValue={salesperson.phoneNumber}
                 onChange={handleChange}
                 placeholder="Enter saleperson's phone number"

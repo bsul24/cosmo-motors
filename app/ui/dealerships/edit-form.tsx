@@ -46,6 +46,7 @@ export default function EditDealershipForm({
                 id="dealershipName"
                 name="dealershipName"
                 type="string"
+                required
                 defaultValue={dealership.dealershipName}
                 placeholder="Enter dealership's name"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -65,6 +66,7 @@ export default function EditDealershipForm({
               <input
                 id="state"
                 name="state"
+                required
                 type="string"
                 defaultValue={dealership.state}
                 placeholder="Enter dealership's state"
@@ -86,6 +88,7 @@ export default function EditDealershipForm({
                 id="city"
                 name="city"
                 type="string"
+                required
                 defaultValue={dealership.city}
                 placeholder="Enter dealership's city"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -105,6 +108,7 @@ export default function EditDealershipForm({
               <input
                 id="address"
                 name="address"
+                required
                 type="string"
                 defaultValue={dealership.address}
                 placeholder="Enter dealership's address"
@@ -129,6 +133,7 @@ export default function EditDealershipForm({
                 id="phoneNumber"
                 name="phoneNumber"
                 type="string"
+                required
                 defaultValue={dealership.phoneNumber}
                 placeholder="Enter dealership's phone number"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"

@@ -55,7 +55,7 @@ export default function Form( {dealerships}: {dealerships: DealershipField[]}) {
         {/* Vehicle's year*/}
         <div className="mb-4">
           <label htmlFor="year" className="mb-2 block text-sm font-medium">
-            Make
+            Year
           </label>
           <div className="relative">
           <input

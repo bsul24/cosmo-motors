@@ -16,12 +16,14 @@ const MultiSelectCosmo = ({
   options,
   selected,
   setSelected,
-  name
+  name,
+  required = false
 }: {
   options: { label: string; value: number; disabled?: boolean }[];
   selected: any[];
   setSelected: Function;
-  name: string
+  name: string,
+  required?: boolean
 }) => {
   return (
     <div>
@@ -37,6 +39,7 @@ const MultiSelectCosmo = ({
         multiple
         name={name}
         id={name}
+        required={required}
         value={selected.map((selection) => selection.value)}
         hidden
       >

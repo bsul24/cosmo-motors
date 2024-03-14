@@ -25,8 +25,8 @@ export default async function SalesTable({
     const customer = await fetchCustomerByID(sale.customerID);
     const salesperson = await fetchSalespersonByID(sale.salespersonID);
     sale.vehicles = vehicleList;
-    sale.customer = `${customer.firstName} ${customer.lastName}`;
-    sale.salesperson = `${salesperson.firstName} ${salesperson.lastName}`;
+    sale.customer = customer ? `${customer?.firstName} ${customer?.lastName}` : '';
+    sale.salesperson = salesperson ? `${salesperson.firstName} ${salesperson.lastName}` : '';
   }
 
   return (

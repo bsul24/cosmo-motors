@@ -315,7 +315,7 @@ export async function deleteDealership(id: number) {
 
 const SaleSchema = z.object({
   saleID: z.number(),
-  customerID: z.number(),
+  customerID: z.number().nullable(),
   salespersonID: z.number(),
   vehicleIDs: z.array(z.string()),
 });
@@ -324,7 +324,7 @@ const CreateSale = SaleSchema.omit({ saleID: true });
 
 export async function createSale(formData: FormData) {
   const { customerID, salespersonID, vehicleIDs } = CreateSale.parse({
-    customerID: parseFloat(formData.get('customerId') as string),
+    customerID: isNaN(parseInt(formData.get('customerId') as string)) ? null : parseInt(formData.get('customerId') as string),
     salespersonID: parseInt(formData.get('salespersonId') as string),
     vehicleIDs: formData.getAll('vehicleIDs'),
   });

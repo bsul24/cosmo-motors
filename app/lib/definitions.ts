@@ -109,9 +109,12 @@ export type DealershipForm = {
 
 export type SalesTable = {
   saleID: number;
-  saleDate: string;
+  saleDate: Date;
   customerID: number;
   salespersonID: number;
+  vehicles: Array<any>;
+  customer: string;
+  salesperson: string;
 };
 
 export type SaleForm = {

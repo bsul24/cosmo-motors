@@ -28,6 +28,7 @@ export default function Form() {
               id="dealershipName"
               name="dealershipName"
               type="string"
+              required
               placeholder="Enter the dealership's name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
@@ -45,6 +46,7 @@ export default function Form() {
               id="state"
               name="state"
               type="string"
+              required
               placeholder="Enter the dealership's state"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
@@ -62,6 +64,7 @@ export default function Form() {
               id="city"
               name="city"
               type="string"
+              required
               placeholder="Enter the dealership's city"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
@@ -79,6 +82,7 @@ export default function Form() {
               id="address"
               name="address"
               type="string"
+              required
               placeholder="Enter the dealership's address"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
@@ -99,6 +103,7 @@ export default function Form() {
               id="phoneNumber"
               name="phoneNumber"
               type="string"
+              required
               placeholder="Enter the dealership's phone number"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
@@ -108,7 +113,7 @@ export default function Form() {
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
-          href="/dashboard/customers"
+          href="/dashboard/dealerships"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
           Cancel
