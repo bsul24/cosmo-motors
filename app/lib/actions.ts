@@ -208,6 +208,8 @@ const CreateVehicle = VehicleSchema.omit({ vehicleID: true });
 // FIX/IMPLEMENT
 export async function createVehicle(formData: FormData) {
 
+
+
   const { make, model, year, price, color, dealershipID } = CreateVehicle.parse(
     {
       make: formData.get('make'),
@@ -232,6 +234,7 @@ export async function createVehicle(formData: FormData) {
 
 // FIX/IMPLEMENT
 export async function updateVehicle(id: number, formData: FormData) {
+
   const { make, model, year, price, color, dealershipID } = CreateVehicle.parse(
     {
       make: formData.get('make'),
@@ -239,7 +242,7 @@ export async function updateVehicle(id: number, formData: FormData) {
       year: formData.get('year'),
       price: parseFloat(formData.get('price') as string),
       color: formData.get('color'),
-      dealershipID: parseInt(formData.get('dealershipID') as string),
+      dealershipID: formData.get('dealershipID') ? parseInt(formData.get('dealershipID') as string) : null,
     },
   );
 

@@ -20,7 +20,6 @@ export default function EditVehicleForm({
   dealerships: DealershipField[]
 }) {
   const updateVehicleWithId = updateVehicle.bind(null, vehicle.vehicleID);
-  console.log(vehicle)
   return (
     <form action={updateVehicleWithId}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
