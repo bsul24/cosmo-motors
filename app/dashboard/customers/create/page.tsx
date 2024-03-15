@@ -3,16 +3,16 @@
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import Form from '@/app/ui/customers/create-form';
 import Breadcrumbs from '@/app/ui/customers/breadcrumbs';
- 
-export default async function Page() { 
+
+export default async function Page() {
   return (
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
+          { label: 'Customers', href: '/dashboard/customers' },
           {
-            label: 'Create Invoice',
-            href: '/dashboard/invoices/create',
+            label: 'Create Customer',
+            href: '/dashboard/customers/create',
             active: true,
           },
         ]}
