@@ -22,6 +22,12 @@ import MultiSelectCosmo from '../multiselect';
 import { use, useState } from 'react';
 import Multiselect from 'multiselect-react-dropdown';
 
+interface EditSalespersonFormProps {
+  salesperson: SalespersonForm;
+  dealerships: DealershipField[];
+  selectedDealerships: any[];
+}
+
 export default function EditSalespersonForm({
   salesperson,
   dealerships,
