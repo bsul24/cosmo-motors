@@ -14,6 +14,7 @@
     "jsx": "preserve",
     "incremental": true,
     "noImplicitAny": false, // Allow implicit 'any' type
+    "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true, // Suppress errors for implicit 'any' type
     "checkJs": false, // Disable type checking for JavaScript files
     "plugins": [
