@@ -1,6 +1,3 @@
-// Citation for the current file:
-// Date: 2/29/2024
-// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 'use client';
 
 import {
@@ -22,24 +19,18 @@ import MultiSelectCosmo from '../multiselect';
 import { use, useState } from 'react';
 import Multiselect from 'multiselect-react-dropdown';
 
+// Add selectedDealerships to the props interface
 interface EditSalespersonFormProps {
   salesperson: SalespersonForm;
   dealerships: DealershipField[];
-  selectedDealerships: any[];
+  selectedDealerships: any[]; // Adjust this type as necessary
 }
 
 export default function EditSalespersonForm({
   salesperson,
   dealerships,
   selectedDealerships,
-}: {
-  salesperson: SalespersonForm;
-  dealerships: DealershipField[];
-}) {
-  // const updateSalespersonWithId = updateSalesperson.bind(
-  //   null,
-  //   salesperson.salespersonID,
-  // );
+}: EditSalespersonFormProps) {
   const id = salesperson.salespersonID;
   const [selected, setSelected] = useState(
     selectedDealerships.map((d) => {
@@ -74,7 +65,6 @@ export default function EditSalespersonForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <form action={updateSalespersonWithId}> */}
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Salesperson's First Name */}
         <div className="mb-4">
@@ -183,14 +173,6 @@ export default function EditSalespersonForm({
               onRemove={handleMultiselectChange}
               displayValue="name"
             />
-            {/* <MultiSelectCosmo
-              options={dealerships.map((dealership) => {
-                const label = dealership.dealershipName;
-                return { label: label, value: dealership.dealershipID };
-              })}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
         </div>
