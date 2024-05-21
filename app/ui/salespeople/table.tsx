@@ -22,7 +22,7 @@ export default async function SalespeopleTable({
     const dealershipList = await fetchSalespersonDealerships(
       salespeople[i].salespersonID,
     );
-    // dealerships.push(dealershipList);
+    // @ts-ignore
     salespeople[i].dealerships = dealershipList;
   }
 
@@ -44,10 +44,13 @@ export default async function SalespeopleTable({
                     <p>{salesperson.email}</p>
                     <p>{salesperson.phoneNumber}</p>
                     <p>
-                      {salesperson.dealerships.reduce(
-                        (accum, cur) => accum + ' ' + cur.dealershipName,
-                        '',
-                      )}
+                      {
+                        // @ts-ignore
+                        salesperson.dealerships.reduce(
+                          (accum, cur) => accum + ' ' + cur.dealershipName,
+                          '',
+                        )
+                      }
                     </p>
                   </div>
                   <div className="flex justify-end gap-2">
@@ -106,11 +109,14 @@ export default async function SalespeopleTable({
                     {salesperson.phoneNumber}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {salesperson.dealerships.reduce((accum, cur, i) => {
-                      return i === 0
-                        ? cur.dealershipName
-                        : accum + ', ' + cur.dealershipName;
-                    }, '')}
+                    {
+                      // @ts-ignore
+                      salesperson.dealerships.reduce((accum, cur, i) => {
+                        return i === 0
+                          ? cur.dealershipName
+                          : accum + ', ' + cur.dealershipName;
+                      }, '')
+                    }
                   </td>
                   <td className="whitespace-nowrap px-3 py-3"></td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
