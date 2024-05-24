@@ -1,23 +1,10 @@
-// Citation for the current file:
-// Date: 2/29/2024
-// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 'use client';
 
 import { DealershipForm } from '@/app/lib/definitions';
-import {
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
-  UserCircleIcon,
-  BuildingStorefrontIcon,
-} from '@heroicons/react/24/outline';
+import { BuildingStorefrontIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import {
-  updateCustomer,
-  updateDealership,
-  updateSalesperson,
-} from '@/app/lib/actions';
+import { updateDealership } from '@/app/lib/actions';
 
 export default function EditDealershipForm({
   dealership,
@@ -45,13 +32,13 @@ export default function EditDealershipForm({
               <input
                 id="dealershipName"
                 name="dealershipName"
-                type="string"
+                type="text"
                 required
                 defaultValue={dealership.dealershipName}
                 placeholder="Enter dealership's name"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
-              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
             </div>
           </div>
         </div>
@@ -67,12 +54,12 @@ export default function EditDealershipForm({
                 id="state"
                 name="state"
                 required
-                type="string"
+                type="text"
                 defaultValue={dealership.state}
                 placeholder="Enter dealership's state"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
-              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
             </div>
           </div>
         </div>
@@ -87,13 +74,13 @@ export default function EditDealershipForm({
               <input
                 id="city"
                 name="city"
-                type="string"
+                type="text"
                 required
                 defaultValue={dealership.city}
                 placeholder="Enter dealership's city"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
-              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
             </div>
           </div>
         </div>
@@ -109,12 +96,12 @@ export default function EditDealershipForm({
                 id="address"
                 name="address"
                 required
-                type="string"
+                type="text"
                 defaultValue={dealership.address}
                 placeholder="Enter dealership's address"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
-              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
             </div>
           </div>
         </div>
@@ -132,14 +119,18 @@ export default function EditDealershipForm({
               <input
                 id="phoneNumber"
                 name="phoneNumber"
-                type="string"
+                type="tel"
                 required
                 defaultValue={dealership.phoneNumber}
                 placeholder="Enter dealership's phone number"
+                pattern="^\d{3}-\d{3}-\d{4}$"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
-              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
             </div>
+            <p className="mt-1 text-xs text-gray-500">
+              Please enter the phone number in the format: 123-456-7890.
+            </p>
           </div>
         </div>
       </div>

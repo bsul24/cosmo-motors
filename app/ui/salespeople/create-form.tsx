@@ -1,6 +1,3 @@
-// Citation for the current file:
-// Date: 2/29/2024
-// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 'use client';
 import { DealershipField } from '@/app/lib/definitions';
 import Link from 'next/link';
@@ -10,9 +7,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createSalesperson } from '@/app/lib/actions';
-import MultiSelectCosmo from '../multiselect';
-import { useState } from 'react';
 import Multiselect from 'multiselect-react-dropdown';
+import { useState } from 'react';
 
 export default function Form({
   dealerships,
@@ -45,15 +41,7 @@ export default function Form({
     createSalesperson(formData, selected);
   }
 
-  // function onSelect(selectedList, selectedItem) {
-  //   selectedList.push(selectedItem);
-  // }
-  // function onRemove(selectedList, removedItem) {
-  //   selectedList.splice(selectedList.indexOf(removedItem), 1);
-  // }
-
   return (
-    // action={createSalesperson}
     <form onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Salesperson's first name */}
@@ -66,8 +54,7 @@ export default function Form({
               onChange={handleChange}
               id="firstName"
               name="firstName"
-              type="string"
-              step="0.01"
+              type="text"
               placeholder="Enter salesperson's first name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
@@ -86,8 +73,7 @@ export default function Form({
               onChange={handleChange}
               id="lastName"
               name="lastName"
-              type="string"
-              step="0.01"
+              type="text"
               placeholder="Enter salesperson's last name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
@@ -105,14 +91,6 @@ export default function Form({
             Choose Dealerships
           </label>
           <div className="relative">
-            {/* <MultiSelectCosmo
-              options={dealerships.map((dealership) => {
-                const label = dealership.dealershipName;
-                return { label: label, value: dealership.dealershipID };
-              })}
-              selected={selected}
-              setSelected={setSelected}
-            /> */}
             <Multiselect
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               options={options}
@@ -134,10 +112,10 @@ export default function Form({
               onChange={handleChange}
               id="email"
               name="email"
-              type="string"
-              step="0.01"
+              type="email"
               placeholder="Enter salesperson's email"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              required
             />
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
@@ -156,14 +134,17 @@ export default function Form({
               onChange={handleChange}
               id="phoneNumber"
               name="phoneNumber"
-              type="string"
-              step="0.01"
-              placeholder="Enter saleperson's phone"
+              type="tel"
+              placeholder="Enter salesperson's phone number"
+              pattern="^\d{3}-\d{3}-\d{4}$"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
             />
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Please enter the phone number in the format: 123-456-7890.
+          </p>
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">

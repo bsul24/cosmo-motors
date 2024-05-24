@@ -1,13 +1,8 @@
-// Citation for the current file:
-// Date: 2/29/2024
-// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
+'use client';
+
 import { DealershipField } from '@/app/lib/definitions';
 import Link from 'next/link';
-import {
-  BuildingStorefrontIcon,
-  TruckIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline';
+import { BuildingStorefrontIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createDealership } from '@/app/lib/actions';
 
@@ -27,7 +22,7 @@ export default function Form() {
             <input
               id="dealershipName"
               name="dealershipName"
-              type="string"
+              type="text"
               required
               placeholder="Enter the dealership's name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -45,7 +40,7 @@ export default function Form() {
             <input
               id="state"
               name="state"
-              type="string"
+              type="text"
               required
               placeholder="Enter the dealership's state"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -63,7 +58,7 @@ export default function Form() {
             <input
               id="city"
               name="city"
-              type="string"
+              type="text"
               required
               placeholder="Enter the dealership's city"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -81,7 +76,7 @@ export default function Form() {
             <input
               id="address"
               name="address"
-              type="string"
+              type="text"
               required
               placeholder="Enter the dealership's address"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -102,13 +97,17 @@ export default function Form() {
             <input
               id="phoneNumber"
               name="phoneNumber"
-              type="string"
+              type="tel"
               required
               placeholder="Enter the dealership's phone number"
+              pattern="^\d{3}-\d{3}-\d{4}$"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
             />
             <BuildingStorefrontIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Please enter the phone number in the format: 123-456-7890.
+          </p>
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">

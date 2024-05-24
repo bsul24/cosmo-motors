@@ -1,6 +1,3 @@
-// Citation for the current file:
-// Date: 2/29/2024
-// Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
 import { CustomerField } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
@@ -25,7 +22,7 @@ export default function Form() {
             <input
               id="firstName"
               name="firstName"
-              type="string"
+              type="text"
               placeholder="Enter customer's first name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
@@ -43,7 +40,7 @@ export default function Form() {
             <input
               id="lastName"
               name="lastName"
-              type="string"
+              type="text"
               placeholder="Enter customer's last name"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
@@ -61,9 +58,10 @@ export default function Form() {
             <input
               id="email"
               name="email"
-              type="string"
+              type="email"
               placeholder="Enter customer's email"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              required
             />
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
@@ -81,13 +79,17 @@ export default function Form() {
             <input
               id="phoneNumber"
               name="phoneNumber"
-              type="string"
-              placeholder="Enter user's phone number"
+              type="tel"
+              placeholder="Enter customer's phone number"
+              pattern="^\d{3}-\d{3}-\d{4}$"
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               required
             />
             <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
           </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Please enter the phone number in the format: 123-456-7890.
+          </p>
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">

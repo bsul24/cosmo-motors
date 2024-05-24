@@ -7,17 +7,13 @@ import {
 } from '@/app/lib/definitions';
 import {
   BuildingStorefrontIcon,
-  CheckIcon,
-  ClockIcon,
-  CurrencyDollarIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { updateCustomer, updateSalesperson } from '@/app/lib/actions';
-import MultiSelectCosmo from '../multiselect';
-import { use, useState } from 'react';
+import { updateSalesperson } from '@/app/lib/actions';
 import Multiselect from 'multiselect-react-dropdown';
+import { useState } from 'react';
 
 // Add selectedDealerships to the props interface
 interface EditSalespersonFormProps {
@@ -76,7 +72,7 @@ export default function EditSalespersonForm({
               <input
                 id="firstName"
                 name="firstName"
-                type="string"
+                type="text"
                 required
                 defaultValue={salesperson.firstName}
                 onChange={handleChange}
@@ -98,7 +94,7 @@ export default function EditSalespersonForm({
               <input
                 id="lastName"
                 name="lastName"
-                type="string"
+                type="text"
                 required
                 defaultValue={salesperson.lastName}
                 onChange={handleChange}
@@ -120,10 +116,11 @@ export default function EditSalespersonForm({
               <input
                 id="email"
                 name="email"
-                type="string"
+                type="email"
+                required
                 defaultValue={salesperson.email}
                 onChange={handleChange}
-                placeholder="Enter saleperson's email"
+                placeholder="Enter salesperson's email"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
@@ -144,19 +141,23 @@ export default function EditSalespersonForm({
               <input
                 id="phoneNumber"
                 name="phoneNumber"
-                type="string"
+                type="tel"
                 required
                 defaultValue={salesperson.phoneNumber}
                 onChange={handleChange}
-                placeholder="Enter saleperson's phone number"
+                placeholder="Enter salesperson's phone number"
+                pattern="^\d{3}-\d{3}-\d{4}$"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               />
               <UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
             </div>
+            <p className="mt-1 text-xs text-gray-500">
+              Please enter the phone number in the format: 123-456-7890.
+            </p>
           </div>
         </div>
 
-        {/* Dealership*/}
+        {/* Dealership */}
         <div className="mb-4">
           <label
             htmlFor="dealerships"
