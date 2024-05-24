@@ -1,7 +1,10 @@
 // Citation for the current file:
 // Date: 2/29/2024
 // Based on URL: https://nextjs.org/learn/dashboard-app/getting-started
-import { UpdateDealership, DeleteDealership} from '@/app/ui/dealerships/buttons';
+import {
+  UpdateDealership,
+  DeleteDealership,
+} from '@/app/ui/dealerships/buttons';
 import { fetchDealerships } from '@/app/lib/data';
 
 export default async function DealershipsTable({
@@ -11,7 +14,7 @@ export default async function DealershipsTable({
   query: string;
   currentPage: number;
 }) {
-  const dealerships = await fetchDealerships(query, currentPage)
+  const dealerships = await fetchDealerships(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">
@@ -23,14 +26,26 @@ export default async function DealershipsTable({
                 key={dealership.dealershipID}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
-                <div className="flex w-full items-center justify-between pt-4">
-                  <div>
-                    <p className="text-xl font-medium">
-                      {dealership.dealershipName + ': ' + dealership.address + ' - ' + dealership.phoneNumber}
-                    </p>
-                    <p>STATE: ${dealership.state}</p>
-                    <p>CITY : {dealership.city}</p>
-                  </div>
+                <div className="flex flex-col gap-4">
+                  <p className="text-lg font-medium">
+                    {dealership.dealershipName}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Address: </span>
+                    {dealership.address}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">State: </span>
+                    {dealership.state}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">City: </span>
+                    {dealership.city}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-medium">Phone Number: </span>
+                    {dealership.phoneNumber}
+                  </p>
                   <div className="flex justify-end gap-2">
                     <UpdateDealership dealershipID={dealership.dealershipID} />
                     <DeleteDealership dealershipID={dealership.dealershipID} />
@@ -85,12 +100,14 @@ export default async function DealershipsTable({
                   <td className="whitespace-nowrap px-3 py-3">
                     {dealership.phoneNumber}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                  </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
-                     <UpdateDealership dealershipID={dealership.dealershipID} />
-                      <DeleteDealership dealershipID={dealership.dealershipID} />
+                      <UpdateDealership
+                        dealershipID={dealership.dealershipID}
+                      />
+                      <DeleteDealership
+                        dealershipID={dealership.dealershipID}
+                      />
                     </div>
                   </td>
                 </tr>
